@@ -1,5 +1,36 @@
-function QuizGame(){
+var shuffle = require('shuffle-array')
 
+var States = {
+	IDLE: "idle",
+	RUNNING: "running",
+	STOPPED: "stopped",
+	PAUSED: "paused"
+}
+
+function QuizGame(){
+	this.quizConfig = {
+		thinkTime: 20,
+		pointsPerQuestion: 1,
+		betweenQuestionsTime: 10
+	}
+	this.questions = []
+	this.currentQuestionIndex = 0
+	this.state = States.IDLE;
+}
+
+QuizGame.prototype.initalize = function(quiz){
+	this.questions = quiz.questions
+
+	for(var c in quiz.config){
+		this.quizConfig[c] = quiz.config[c]
+	}
+	if(this.quizConfig.shuffle){
+		shuffle(this.questions);
+	}
+
+	for(var i in this.questions){
+		console.log(this.questions[i].text)
+	}
 }
 
 QuizGame.prototype.start = function(){
@@ -12,10 +43,6 @@ QuizGame.prototype.stop = function(){
 
 QuizGame.prototype.pause = function() {
 	console.log('game paused')
-}
-
-QuizGame.prototype.getQuestions = function(){
-	console.log('questions fetched!')
 }
 
 module.exports = QuizGame

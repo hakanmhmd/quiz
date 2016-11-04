@@ -533,12 +533,11 @@
       ]
     }
   ],
-  "settings": {
-    "startQuestionGap": 3,
-    "questionTime": 90,
-    "nextQuestionGap": 10,
+  "config": {
+    "startQuestionTime": 3,
+    "thinkTime": 90,
+    "betweenQuestionsTime": 10,
     "pointsPerQuestion": 3,
-    "randomise": true,
-    "questionGap": 10
+    "shuffle": true,
   }
 }

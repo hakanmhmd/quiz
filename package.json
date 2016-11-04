@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/hakanmhmd/quiz/issues"
   },
-  "homepage": "https://github.com/hakanmhmd/quiz#readme"
+  "homepage": "https://github.com/hakanmhmd/quiz#readme",
+  "dependencies": {
+    "shuffle-array": "^1.0.0"
+  }
 }

@@ -367,11 +367,11 @@
       "points": 1
     }
   ],
-  "settings": {
-    "startQuestionGap": 3,
-    "questionTime": 60,
-    "nextQuestionGap": 10,
+  "config": {
+    "startQuestionTime": 3,
+    "thinkTime": 60,
+    "betweenQuestionsTime": 10,
     "pointsPerQuestion": 1,
-    "randomise": true
+    "shuffle": true
   }
 }
