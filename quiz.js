@@ -28,6 +28,8 @@ QuizLogic.prototype.initalize = function(quiz){
 		shuffle(this.questions);
 	}
 
+	console.log('initalized ' + quiz)
+
 }
 
 QuizLogic.prototype.start = function(){

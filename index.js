@@ -1,16 +1,38 @@
 var QuizLogic = require('./quiz')
 var fs = require('fs')
-var rl = require('readline')
+var readline = require('readline')
 var quiz = new QuizLogic()
-var prompts = rl.createInterface(process.stdin, process.stdout)
 
+var rl = readline.createInterface({
+	input: process.stdin,
+	output: process.stdout,
+	terminal: false
+});
 
 function Game(lang) {
 	if(!lang){
 		lang = 'en'
 	}
 	this.lang = lang
-	this.promptUser()
+	
+	rl.on('line', function(data){
+    	if(data == 'list'){
+			this.listQuizzes()
+		} else if(data.indexOf('start quiz') > -1){
+			var index = data.indexOf('start quiz');
+			
+			var rest = data.substring(index + 11);
+			var nextSpace = rest.indexOf(" ");
+			var quizId = rest.substring(0, nextSpace > -1 ? nextSpace : rest.length);
+			
+			var quizData = fs.readFileSync('quizzes/'+ quizId +'.json', 'utf8')
+			quiz.initalize(JSON.parse(quizData))
+		} else if(data == 'stop quiz'){
+			quiz.stop()
+		} else if(data == 'pause quiz'){
+			quiz.pause()
+		}
+	}.bind(this))
 		
 } 
 
@@ -32,6 +54,9 @@ Game.prototype.promptUser = function(){
 }
 
 
+
+
+
 Game.prototype.listQuizzes = function() {
 	this.quizList = []
 	fs.readdir(__dirname + '/quizzes', function(err, files) {
@@ -49,11 +74,6 @@ Game.prototype.listQuizzes = function() {
 			output += this.quizList[i];
 		}
 		console.log("Here are the quizzes I've got: " + output);
-		prompts.question("Which one do you want to play?", function(quizName){
-			console.log(quizName)
-			var quizData = fs.readFileSync('quizzes/'+ quizName +'.json', 'utf8')
-			quiz.initalize(JSON.parse(quizData))
-		})
 	}.bind(this));
 };
 
