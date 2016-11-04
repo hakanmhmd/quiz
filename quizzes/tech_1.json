@@ -521,16 +521,6 @@
           ]
         }
       ]
-    },
-    {
-      "text": "",
-      "answers": [
-        {
-          "text": [
-            ""
-          ]
-        }
-      ]
     }
   ],
   "config": {
@@ -538,6 +528,6 @@
     "thinkTime": 90,
     "betweenQuestionsTime": 10,
     "pointsPerQuestion": 3,
-    "shuffle": true,
+    "shuffle": true
   }
 }

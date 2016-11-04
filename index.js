@@ -53,10 +53,6 @@ Game.prototype.promptUser = function(){
 
 }
 
-
-
-
-
 Game.prototype.listQuizzes = function() {
 	this.quizList = []
 	fs.readdir(__dirname + '/quizzes', function(err, files) {
