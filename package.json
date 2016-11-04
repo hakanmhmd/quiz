@@ -1,0 +1,23 @@
+{
+  "name": "quiz",
+  "version": "1.0.0",
+  "description": "quiz",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hakanmhmd/quiz.git"
+  },
+  "keywords": [
+    "quiz"
+  ],
+  "author": "Hakan Mehmed",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hakanmhmd/quiz/issues"
+  },
+  "homepage": "https://github.com/hakanmhmd/quiz#readme"
+}
