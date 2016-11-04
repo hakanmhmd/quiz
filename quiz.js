@@ -7,7 +7,7 @@ var States = {
 	PAUSED: "paused"
 }
 
-function QuizGame(){
+function QuizLogic(){
 	this.quizConfig = {
 		thinkTime: 20,
 		pointsPerQuestion: 1,
@@ -18,7 +18,7 @@ function QuizGame(){
 	this.state = States.IDLE;
 }
 
-QuizGame.prototype.initalize = function(quiz){
+QuizLogic.prototype.initalize = function(quiz){
 	this.questions = quiz.questions
 
 	for(var c in quiz.config){
@@ -28,21 +28,18 @@ QuizGame.prototype.initalize = function(quiz){
 		shuffle(this.questions);
 	}
 
-	for(var i in this.questions){
-		console.log(this.questions[i].text)
-	}
 }
 
-QuizGame.prototype.start = function(){
+QuizLogic.prototype.start = function(){
 	console.log('game started')
 }
 
-QuizGame.prototype.stop = function(){
+QuizLogic.prototype.stop = function(){
 	console.log('game stopped')
 }
 
-QuizGame.prototype.pause = function() {
+QuizLogic.prototype.pause = function() {
 	console.log('game paused')
 }
 
-module.exports = QuizGame
+module.exports = QuizLogic
