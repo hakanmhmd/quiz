@@ -27,12 +27,15 @@ function Game(lang) {
 				quiz.initalize(JSON.parse(quizData))
 				quiz.start()
 			}
-		} else if(data == 'stop quiz'){
+		} else if(data == 'stop'){
 			quiz.stop()
-		} else if(data == 'pause quiz'){
+		} else if(data == 'pause'){
 			quiz.pause()
-		} else if(data == 'resume quiz'){
+		} else if(data == 'resume'){
 			quiz.resume()
+		} else {
+			//check if the answer has been given
+			quiz.checkAnswer(data)
 		}
 	}.bind(this))
 		

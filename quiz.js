@@ -13,12 +13,11 @@ function QuizLogic(){
 		thinkTime: 20,
 		pointsPerQuestion: 1,
 		betweenQuestionsTime: 10,
-		showScoreInterval: 5,
         timeBetweenIncorrectResponses: 10
 	}
 	this.questions = []
 	this.currentQuestionIndex = 0
-	this.state = State.IDLE;
+	this.state = State.IDLE
 	this.score = 0
 }
 
@@ -76,7 +75,7 @@ QuizLogic.prototype.outputQuestion = function() {
     this.currentQuestion = this.questions[this.currentQuestionIndex]; 
     this.currentQuestion.timeLeft = this.currentQuestion.time || this.quizConfig.thinkTime;
     this.currentQuestion.points = this.currentQuestion.points || this.quizConfig.pointsPerQuestion;
-    this.currentQuestion.answerCount = this.currentQuestion.answersNeeded || this.currentQuestion.answers.length;
+    this.currentQuestion.pendingAnswersCount = this.currentQuestion.answersNeeded || this.currentQuestion.answers.length;
     this.currentQuestion.pendingAnswers = this.currentQuestion.answers; 
 
     console.log('QUESTION: ' + this.currentQuestion.text)
@@ -89,6 +88,7 @@ QuizLogic.prototype.update = function() {
     this.currentQuestion.timeLeft--
         if(this.currentQuestion.timeLeft <= 0) {
         	console.log('QUESTION TIMEOUT...')
+            this.getCorrectAnswers()
             this.endQuestion()
         }else{
             if(this.currentQuestion.timeLeft == 10) {
@@ -100,12 +100,10 @@ QuizLogic.prototype.update = function() {
 QuizLogic.prototype.endQuestion = function() {
     this.state = State.QUESTION_ANSWERED
     clearInterval(this.interval)
-    this.showScoreCount++
-    if(this.showScoreCount >= this.quizConfig.showScoreInterval && this.currentQuestionIndex < this.questions.length-1) {
+    if(this.currentQuestionIndex == this.questions.length-1) {
         setTimeout((function() {
         	console.log('SCORE: ' + this.score)
         }.bind(this)), 3000)
-        this.showScoreCount = 0;
         setTimeout(this.nextQuestion.bind(this), 3000 + this.quizConfig.betweenQuestionsTime * 1000)
     }else{
         setTimeout(this.nextQuestion.bind(this), this.quizConfig.betweenQuestionsTime * 1000)
@@ -131,35 +129,58 @@ QuizLogic.prototype.complete = function() {
 QuizLogic.prototype.checkAnswer = function(text) {
     var userText = text.toLowerCase();
     var i = this.currentQuestion.pendingAnswers.length-1;
-    var correctAnswers = [];
-    while(i >= 0 && this.currentQuestion.answerCount > 0) {
+    var correct = false;
+    while(i >= 0 && this.currentQuestion.pendingAnswersCount > 0) {
         for(var j=0; j<this.currentQuestion.pendingAnswers[i].text.length; j++) {
             if(userText.indexOf(this.currentQuestion.pendingAnswers[i].text[j].toLowerCase()) > -1) {
-                correctAnswers.push(this.currentQuestion.pendingAnswers[i].text[0]);
-                this.currentQuestion.answerCount--;
+                correct = true
+                this.currentQuestion.pendingAnswersCount--;
                 this.currentQuestion.pendingAnswers.splice(i, 1);
                 break;
             }
         }
         i--;
     }
-    if(correctAnswers.length > 0) {
-        var points = this.currentQuestion.points * correctAnswers.length;
+
+    if(correct) {
+        var points = this.currentQuestion.points;
         this.score += points
         console.log('CORRECT ANSWER...')
-        if(this.currentQuestion.answerCount == 0) {
-            if(this.currentQuestion.pendingAnswers.length > 0) {
-                console.log('OTHER POSSIBLE ANSWERS...')
-            }
+        if(this.currentQuestion.pendingAnswersCount == 0) {
             this.endQuestion();
         }
+        if(this.currentQuestion.pendingAnswers.length != 0)
+            console.log(this.currentQuestion.pendingAnswers.length + " more left.")
     }else{
-        var now = new Date().getTime();
-        if(now - this.lastIncorrectAnswerPing > this.quizConfig.timeBetweenIncorrectResponses * 1000) {
-            console.log('INCORRECT ANSWER...')
-            this.lastIncorrectAnswerPing = now;
-        }
+        console.log('INCORRECT ANSWER...')
     }
-};
+}
+
+QuizLogic.prototype.getOtherPossibleAnswers== function(otherAnswers){
+    var answersText = ""
+    for(var i=0; i<otherAnswers.length; i++) {
+        if(i != 0) {
+            if(i == otherAnswers.length-1) {
+                answersText += " and "
+            }else{
+                answersText += ", "
+            }
+        }
+        answersText += otherAnswers[i].text[0]
+    }
+    return answersText
+}
+
+QuizLogic.prototype.getCorrectAnswers = function() {
+    var text = "";
+    var len = this.currentQuestion.answers.length
+    for(var i=0; i<len; i++) {
+        if(i > 0 && i < len-1) text += ", "
+        if(i > 0 && i == len-1) text += " and "
+        text += this.currentQuestion.answers[i].text[0]
+        
+    }
+    console.log("CORRECT ANSWER(S): " + text)
+}
 
 module.exports = QuizLogic

@@ -118,7 +118,7 @@
 	"config":{
 		"startQuestionTime":3,
 		"thinkTime":15,
-		"betweenQuestionsTime":10,
+		"betweenQuestionsTime":3,
 		"pointsPerQuestion":3,
 		"shuffle":false
 	}
