@@ -1,7 +1,7 @@
 var QuizLogic = require('./quiz')
 var fs = require('fs')
 var readline = require('readline')
-var quiz = new QuizLogic()
+
 
 var rl = readline.createInterface({
 	input: process.stdin,
@@ -10,15 +10,12 @@ var rl = readline.createInterface({
 });
 
 function Game(lang) {
-	if(!lang){
-		lang = 'en'
-	}
-	this.lang = lang
-	
+	var quiz = new QuizLogic()
 	rl.on('line', function(data){
     	if(data == 'list'){
 			this.listQuizzes()
 		} else if(data.indexOf('start quiz') > -1){
+			
 			var index = data.indexOf('start quiz');
 			
 			var rest = data.substring(index + 11);
@@ -27,31 +24,17 @@ function Game(lang) {
 			
 			var quizData = fs.readFileSync('quizzes/'+ quizId +'.json', 'utf8')
 			quiz.initalize(JSON.parse(quizData))
+			quiz.start()
 		} else if(data == 'stop quiz'){
 			quiz.stop()
 		} else if(data == 'pause quiz'){
 			quiz.pause()
+		} else if(data == 'resume quiz'){
+			quiz.resume()
 		}
 	}.bind(this))
 		
 } 
-
-
-Game.prototype.promptUser = function(){
-	var that = this
-	prompts.question("Choose command: ", function(command){
-		if(command == 'list'){
-			that.listQuizzes()
-		} else if(command == 'start'){
-			quiz.start()
-		} else if(command == 'stop'){
-			quiz.stop()
-		} else if(command == 'pause'){
-			quiz.pause()
-		}
-	})
-
-}
 
 Game.prototype.listQuizzes = function() {
 	this.quizList = []
