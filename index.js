@@ -22,9 +22,11 @@ function Game(lang) {
 			var nextSpace = rest.indexOf(" ");
 			var quizId = rest.substring(0, nextSpace > -1 ? nextSpace : rest.length);
 			
-			var quizData = fs.readFileSync('quizzes/'+ quizId +'.json', 'utf8')
-			quiz.initalize(JSON.parse(quizData))
-			quiz.start()
+			quizData = this.load(quizId)
+			if(quizData){
+				quiz.initalize(JSON.parse(quizData))
+				quiz.start()
+			}
 		} else if(data == 'stop quiz'){
 			quiz.stop()
 		} else if(data == 'pause quiz'){
@@ -55,6 +57,16 @@ Game.prototype.listQuizzes = function() {
 		console.log("Here are the quizzes I've got: " + output);
 	}.bind(this));
 };
+
+Game.prototype.load = function(quizId) {
+	var filePath = 'quizzes/'+ quizId +'.json'
+	try {
+		var data = fs.readFileSync(filePath, 'utf8');
+	}catch (e) {
+		console.log('No such file.')
+	}
+	return data
+}
 
 new Game()
 
